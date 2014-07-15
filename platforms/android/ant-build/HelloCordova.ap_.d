@@ -125,6 +125,8 @@
 /Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/card.html \
 /Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/cards.html \
 /Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/friend-detail.html \
+/Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/login.html \
+/Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/signup.html \
 /Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/tab-account.html \
 /Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/tab-dash.html \
 /Users/bryanvillafane/Desktop/apps/savvy/platforms/android/assets/www/templates/tab-friends.html \
