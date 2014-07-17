@@ -1,5 +1,5 @@
 <ion-view title="Swipe cards" no-scroll>
-  <ion-pane>
+  <ion-pane style="background: #333">
 	  <header-bar type="bar-transparent" title="'Promociones'">
 	  </header-bar>
 	  <a class="button button-icon icon-right ion-person" href="#/tab/dash"></a>
@@ -11,13 +11,13 @@
 	    <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-swipe="cardSwiped($index)">
 	      <div>
 	        <div class="title">
-	          {{card.title}}
+	          {{card.p_name}}
 	        </div>
 	        <div class="image">
-	          <img ng-src="{{card.image}}">
+	          <img ng-src="{{card.p_image}}">
 	        </div>
 	        <div class="button-bar">
-	          <a class="button button-clear icon ion-plus button-positive" href="#/card/{{card.id_promo}}"> Mas info</a>
+	          <a class="button button-clear icon ion-plus button-positive" href="#/card/{{card.p_id}}"> Mas info</a>
 	        </div>
 	      </div>
 	    </swipe-card>

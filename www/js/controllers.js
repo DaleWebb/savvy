@@ -29,7 +29,7 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
   	if (data.email && data.password) {
 	    var result = LoginService.login(data.email, data.password);
 	    
-	    $ionicLoading.show({template: '<i class="icon ion-looping"></i>'});
+	    $ionicLoading.show({template: '<i class="icon ion-looping"></i>', showBackdrop: false});
 	    
 	    result.then(function(data) {
 	      $ionicLoading.hide();
@@ -41,7 +41,7 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
       		data.password = "";
 	      	$state.go('cards');
 	      }else{
-	      	$ionicLoading.show({template: '<p>Error</p>', duration: 1300});
+	      	$ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
 	      }
 
 	    });
@@ -59,22 +59,23 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
  //    template: '<i class="icon ion-looping"></i>'
  //  });
 
-  $scope.signup = function(data) {
-  	if (data.name && data.email && data.password) {
-	    var result = SignupService.login(data.email, data.password);
+  $scope.signup = function(inputs) {
+  	if (inputs.name && inputs.email && inputs.password) {
+	    var result = SignupService.login(inputs.name, inputs.email, inputs.password);
 	    
-	    $ionicLoading.show({template: '<i class="icon ion-looping"></i>'});
+	    $ionicLoading.show({template: '<i class="icon ion-looping"></i>', showBackdrop: false});
 	    
 	    result.then(function(data) {
 	      $ionicLoading.hide();
-	      console.log(data)
+	      console.log(data);
+
 	      if (data.status == 200) {
 	      	$state.go('login');
-		  	 	data.name = "";
-		  	 	data.email = "";
-		      data.password = "";
+		  	 	inputs.name = "";
+		  	 	inputs.email = "";
+		      inputs.password = "";
 	      }else{
-	      	$ionicLoading.show({template: '<p>Error</p>', duration: 1300});
+	      	$ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
 	      }
 
 	    });
@@ -88,9 +89,7 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
 
 .controller('CardsCtrl', function ($scope, $ionicLoading, $ionicSwipeCardDelegate, cards, $timeout) {
   
-  $ionicLoading.show({
-    template: '<i class="icon ion-looping"></i>'
-  });
+  $ionicLoading.show({template: '<i class="icon ion-looping"></i>', showBackdrop: false});
 
   $scope.cards = Array.prototype.slice.call(cards, 0, 0);
 
@@ -118,16 +117,35 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
   }, 400);
 })
 
-.controller('CardCtrl', function ($scope, $ionicLoading, $timeout) {
+.controller('CardCtrl', function ($scope, $ionicLoading, CardDetailService, $stateParams) {
 
-  $ionicLoading.show({
-    template: '<i class="icon ion-looping"></i>'
-  });
+  $ionicLoading.show({template: '<i class="icon ion-looping"></i>', showBackdrop: false});
 
+  var result = CardDetailService.getDetails($stateParams.promoId);
 
-  $timeout(function() {
-    $ionicLoading.hide();
-  }, 400);
+  $scope.details = {}
+
+  result.then(function(data) {
+    if (data.status == 200) {
+      $scope.details = data.promotion;
+      $ionicLoading.hide();
+    }else{
+      $ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
+    }
+  })
+
+  $scope.onHeart = function (promoId) {
+    promi = CardDetailService.onHeart(promoId);
+    promi.then(function (datos) {
+      console.log(datos)
+      if (datos.status == 200) {
+        $ionicLoading.show({template: '<i class="icon ion-checkmark-round"></i>', showBackdrop: false, duration: 800});
+      }else{
+        $ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
+      }
+    })
+  }
+
 })
 
 .controller('DashCtrl', function ($scope) {

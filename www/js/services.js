@@ -14,7 +14,7 @@ angular.module('starter.services', [])
       var xsrf = { email: email, password: password };
       $http({
         method: 'POST',
-        url: 'http://savvy.railsplayground.net/api/user/signin',
+        url: 'http://192.168.0.16:3001/api/user/signin',
         transformRequest: function(obj) {
           var str = [];
           for(var p in obj)
@@ -39,15 +39,11 @@ angular.module('starter.services', [])
   return {
     login: function(name, email, password) {
       var defer = $q.defer(); 
-      
-      // replace timeout function with actual $http call
-      // the $http call will return a promise equivelant to
-      // defer.promise;
-
+    
       var xsrf = { name: name, email: email, password: password };
       $http({
         method: 'POST',
-        url: 'http://savvy.railsplayground.net/api/user/signup',
+        url: 'http://192.168.0.16:3001/api/user/signup',
         transformRequest: function(obj) {
           var str = [];
           for(var p in obj)
@@ -66,15 +62,66 @@ angular.module('starter.services', [])
   }  
 })
 
-.factory('CardsService', function() {
+.factory('CardsService', function ($q, $http) {
   return {
     getCards: function() {
-      return cards = [
-      { id_promo: 1, title: '20 % en comida', image: 'img/ionic.png' },
-      { id_promo: 2, title: 'Where is this?', image: 'img/pic.png' },
-      { id_promo: 4, title: 'beach is this?', image: 'img/pic2.png' },
-      { id_promo: 5, title: 'kind of clouds are these?', image: 'img/pic3.png' }
-    ]
+
+      var defer = $q.defer(); 
+      token = localStorage.getItem("token");
+      $http({
+        method: 'GET',
+        url: 'http://192.168.0.16:3001/api/establishments/promotions/'+token+''
+      }).success(function(data) {
+        // presume data contains json {token: some token}
+        defer.resolve(data.promotions);
+
+      }).error(function(){
+       defer.resolve();
+      });      
+      return defer.promise;
+    }
+  };
+})
+
+.factory('CardDetailService', function ($q, $http) {
+  $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+  return {
+    getDetails: function(promoId) {
+      var defer = $q.defer(); 
+      token = localStorage.getItem("token");
+      $http({
+        method: 'GET',
+        url: 'http://192.168.0.16:3001/api/promotions/'+promoId+''
+      }).success(function(data) {
+        // presume data contains json {token: some token}
+        defer.resolve(data);
+      }).error(function(){
+       defer.resolve();
+      });      
+      return defer.promise;
+    },
+    onHeart: function (promoId) {
+      var defertwo = $q.defer(); 
+      token = localStorage.getItem("token");
+
+      var xsrf = { token: token, promotion_id: promoId };
+      $http({
+        method: 'POST',
+        url: 'http://192.168.0.16:3001/api/user/heart',
+        transformRequest: function(obj) {
+          var str = [];
+          for(var p in obj)
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          return str.join("&");
+        },
+        data: xsrf
+      }).success(function(info) {
+        // presume data contains json {token: some token}
+        defertwo.resolve(info);
+      }).error(function(){
+       defertwo.resolve();
+      });      
+      return defertwo.promise;
     }
   };
 })
