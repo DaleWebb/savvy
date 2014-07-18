@@ -14,7 +14,7 @@ angular.module('starter.services', [])
       var xsrf = { email: email, password: password };
       $http({
         method: 'POST',
-        url: 'http://192.168.0.16:3001/api/user/signin',
+        url: 'http://192.168.0.17:3001/api/user/signin',
         transformRequest: function(obj) {
           var str = [];
           for(var p in obj)
@@ -43,7 +43,7 @@ angular.module('starter.services', [])
       var xsrf = { name: name, email: email, password: password };
       $http({
         method: 'POST',
-        url: 'http://192.168.0.16:3001/api/user/signup',
+        url: 'http://192.168.0.17:3001/api/user/signup',
         transformRequest: function(obj) {
           var str = [];
           for(var p in obj)
@@ -52,7 +52,6 @@ angular.module('starter.services', [])
         },
         data: xsrf
       }).success(function(data) {
-        // presume data contains json {token: some token}
         defer.resolve(data);
       }).error(function(){
        defer.resolve();
@@ -70,9 +69,8 @@ angular.module('starter.services', [])
       token = localStorage.getItem("token");
       $http({
         method: 'GET',
-        url: 'http://192.168.0.16:3001/api/establishments/promotions/'+token+''
+        url: 'http://192.168.0.17:3001/api/establishments/promotions/'+token+''
       }).success(function(data) {
-        // presume data contains json {token: some token}
         defer.resolve(data.promotions);
 
       }).error(function(){
@@ -85,15 +83,15 @@ angular.module('starter.services', [])
 
 .factory('CardDetailService', function ($q, $http) {
   $http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
+  token = localStorage.getItem("token");
   return {
     getDetails: function(promoId) {
       var defer = $q.defer(); 
-      token = localStorage.getItem("token");
+
       $http({
         method: 'GET',
-        url: 'http://192.168.0.16:3001/api/promotions/'+promoId+''
+        url: 'http://192.168.0.17:3001/api/promotions/'+promoId+''
       }).success(function(data) {
-        // presume data contains json {token: some token}
         defer.resolve(data);
       }).error(function(){
        defer.resolve();
@@ -102,12 +100,11 @@ angular.module('starter.services', [])
     },
     onHeart: function (promoId) {
       var defertwo = $q.defer(); 
-      token = localStorage.getItem("token");
 
       var xsrf = { token: token, promotion_id: promoId };
       $http({
         method: 'POST',
-        url: 'http://192.168.0.16:3001/api/user/heart',
+        url: 'http://192.168.0.17:3001/api/user/heart',
         transformRequest: function(obj) {
           var str = [];
           for(var p in obj)
@@ -116,12 +113,53 @@ angular.module('starter.services', [])
         },
         data: xsrf
       }).success(function(info) {
-        // presume data contains json {token: some token}
         defertwo.resolve(info);
       }).error(function(){
        defertwo.resolve();
       });      
       return defertwo.promise;
+    },
+    onPido: function (promoId) {
+      var deferthree = $q.defer(); 
+
+      var xsrf = { token: token, promotion_id: promoId };
+      $http({
+        method: 'POST',
+        url: 'http://192.168.0.17:3001/api/establishment/client',
+        transformRequest: function(obj) {
+          var str = [];
+          for(var p in obj)
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          return str.join("&");
+        },
+        data: xsrf
+      }).success(function(info) {
+        deferthree.resolve(info);
+      }).error(function(){
+       deferthree.resolve();
+      });      
+      return deferthree.promise;
+    },
+    onFav: function (eId) {
+      var deferfour = $q.defer(); 
+
+      var xsrf = { token: token, establishment_id: eId };
+      $http({
+        method: 'POST',
+        url: 'http://192.168.0.17:3001/api/user/favorite',
+        transformRequest: function(obj) {
+          var str = [];
+          for(var p in obj)
+            str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+          return str.join("&");
+        },
+        data: xsrf
+      }).success(function(info) {
+        deferfour.resolve(info);
+      }).error(function(){
+       deferfour.resolve();
+      });      
+      return deferfour.promise;
     }
   };
 })

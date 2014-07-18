@@ -58,6 +58,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       controller: 'CardCtrl'
     })
 
+    .state('map-establishment', {
+      url: '/map-establishment/:establishmentId',
+      templateUrl: 'templates/establishment.html',
+      controller: 'EstablishmentCtrl'
+    })
+
     // setup an abstract state for the tabs directive
     .state('tab', {
       url: "/tab",

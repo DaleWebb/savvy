@@ -1,40 +1,30 @@
 <ion-view style="background: #1b5a83">
 
-    <ion-content padding="true" ng-repeat="detail in details">
+    <ion-content ng-repeat="detail in details">
 
-      <ion-header-bar>
+      <ion-header-bar class="bar-calm">
         <h1 class="title">{{detail.p_name}}</h1>
         <a class="button button-icon ion-chevron-left" href="#/cards"></a>
         <button class="button button-icon ion-heart" ng-click="onHeart({{detail.p_id}})"></button>
       </ion-header-bar>
-      <br> 
+
+      <br><br> 
+
       <div class="list card">
-
-        <div class="item item-avatar">
-          <img src="http://ionicframework.com/img/docs/mcfly.jpg"> <a class="button button-small ion-map" href="#/map"></a>
-          <h2>{{detail.e_name}}</h2>
-          <p>{{detail.city}}, {{detail.country}}</p>
-          <p>{{detail.address}}, tel: {{detail.telephone}}</p>
-
-        </div>
-
         <div class="item item-body">
           <h3>{{detail.p_name}}</h3><p>{{detail.number_clients}}/{{detail.max}}</p>
           <p>${{detail.p_original_price}}, {{detail.p_user_benefit}}%, ${{detail.p_end_price}}</p>
-          <img class="full-image" src="http://ionicframework.com/img/docs/delorean.jpg">
-          <p>
-            {{detail.p_description}}
-          </p>
+          <buttton class="button button-icon ion-information" ng-click="modal.show()"> {{detail.e_name}}</buttton>
+          <img class="full-image" src="http://192.168.0.17:3001/{{detail.p_image}}">
+          <p>{{detail.p_description}}</p>
           <p>
             <a href="#" class="subdued">1 Fotos</a>
             <a href="#" class="subdued">5 Comentarios</a>
           </p>
         </div>
 
-        <button class="button button-full button-balanced icon ion-happy" ng-click="onPido({{detail.p_id}})">
-          Me lo pido!
-        </button>
-
+        <button class="button button-full button-balanced icon ion-happy" ng-click="onPido({{detail.p_id}})"> Me lo pido!</button>
       </div>
+
     </ion-content>
 </ion-view>

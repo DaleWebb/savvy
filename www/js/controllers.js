@@ -15,15 +15,15 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
 
 .controller('LoginCtrl', function ($scope, $ionicLoading, $state, LoginService) {
 	
-	// $ionicLoading.show({template: '<i class="icon ion-looping"></i>'});
+	$ionicLoading.show({template: '<i class="icon ion-looping"></i>'});
 
-	// token = localStorage.getItem("token");
-	// if (token) {
-	// 	$ionicLoading.hide();
-	// 	$state.go('cards');
-	// }else{
-	// 	$ionicLoading.hide();
-	// }
+	token = localStorage.getItem("token");
+	if (token) {
+		$ionicLoading.hide();
+		$state.go('cards');
+	}else{
+		$ionicLoading.hide();
+	}
 
   $scope.login = function(data) {
   	if (data.email && data.password) {
@@ -33,8 +33,6 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
 	    
 	    result.then(function(data) {
 	      $ionicLoading.hide();
-
-	      console.log(data)
 	      if (data.status == 200) {
 	      	localStorage.setItem("token", data.token);
 	      	data.email = "";
@@ -117,9 +115,39 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
   }, 400);
 })
 
-.controller('CardCtrl', function ($scope, $ionicLoading, CardDetailService, $stateParams) {
+.controller('CardCtrl', function ($scope, $ionicLoading, CardDetailService, $stateParams, $ionicModal, $ionicPopup) {
 
   $ionicLoading.show({template: '<i class="icon ion-looping"></i>', showBackdrop: false});
+
+  $ionicModal.fromTemplateUrl('templates/establishment.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.openMap = function(lat, lng){
+    // $ionicLoading.show({template: '<i class="icon ion-looping"></i>', showBackdrop: false});
+    console.log(lat, lng);
+  }; 
+
+  $scope.onFav = function (eId) {
+    promi = CardDetailService.onFav(eId);
+    promi.then(function (datos) {
+      if (datos.status == 200) {
+        $ionicLoading.show({template: '<i class="icon ion-checkmark-round"></i>', showBackdrop: false, duration: 800});
+      }else{
+        $ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
+      }
+    })
+  }
 
   var result = CardDetailService.getDetails($stateParams.promoId);
 
@@ -137,7 +165,6 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
   $scope.onHeart = function (promoId) {
     promi = CardDetailService.onHeart(promoId);
     promi.then(function (datos) {
-      console.log(datos)
       if (datos.status == 200) {
         $ionicLoading.show({template: '<i class="icon ion-checkmark-round"></i>', showBackdrop: false, duration: 800});
       }else{
@@ -145,6 +172,28 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
       }
     })
   }
+
+  $scope.onPido = function (promoId){
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Estas a punto de pedir esta promocion',
+      template: 'Estas seguro?',
+      cancelText: 'Cancelar',
+      okText: 'Si!'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        promi = CardDetailService.onPido(promoId);
+        promi.then(function (datos) {
+          console.log(datos)
+          if (datos.status == 200) {
+            $ionicLoading.show({template: '<i class="icon ion-checkmark-round"></i>', showBackdrop: false, duration: 800});
+          }else{
+            $ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
+          }
+        })
+      }
+    });
+  }//En onPido
 
 })
 
