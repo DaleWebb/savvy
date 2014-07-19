@@ -141,11 +141,8 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
   $scope.onFav = function (eId) {
     promi = CardDetailService.onFav(eId);
     promi.then(function (datos) {
-      if (datos.status == 200) {
-        $ionicLoading.show({template: '<i class="icon ion-checkmark-round"></i>', showBackdrop: false, duration: 800});
-      }else{
-        $ionicLoading.show({template: '<p>Error</p>', duration: 1300, showBackdrop: false});
-      }
+      console.log(datos)
+      $ionicLoading.show({template: '<i class="icon ion-checkmark-round"></i>', showBackdrop: false, duration: 800});
     })
   }
 

@@ -60,7 +60,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
     .state('map-establishment', {
       url: '/map-establishment/:establishmentId',
-      templateUrl: 'templates/establishment.html',
+      templateUrl: 'templates/map.html',
       controller: 'EstablishmentCtrl'
     })
 
