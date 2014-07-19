@@ -5,7 +5,7 @@
 	  <a class="button button-icon icon-right ion-person" href="#/tab/dash"></a>
 
 	  <swipe-cards>
-	    <swipe-card on-swipe="cardSwiped()" id="start-card">
+	    <swipe-card on-swipe="cardSwiped()" on-destroy="cardDestroyed($index)" id="start-card">
 	      Swipe hacia abajo para una nueva tarjeta
 	    </swipe-card>
 	    <swipe-card ng-repeat="card in cards" on-destroy="cardDestroyed($index)" on-swipe="cardSwiped($index)">

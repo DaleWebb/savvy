@@ -96,13 +96,13 @@ angular.module('starter.controllers', ['ionic.contrib.ui.cards', 'ionic'])
 
   $scope.cardSwiped = function(index) {
     console.log('cardSwiped', index);
-    $scope.addCard();
   }
 
   $scope.cardDestroyed = function(index) {
     console.log(index);
     //Splice remueve en la position 1 del array
     $scope.cards.splice(index, 1);
+    $scope.addCard();
     console.log('cardDestroyed');
   }
   
